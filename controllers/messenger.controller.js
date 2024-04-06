@@ -23,6 +23,7 @@ const verifyWebhook = async (req, res) => {
 
 const handleWebhook = async (req, res) => {
     try {
+        console.log(req.body);
         return res.status(200).send('WEBHOOK_VERIFIED');
     } catch (err) {
         return res.status(500).send(err.message);
