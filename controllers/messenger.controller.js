@@ -1,13 +1,5 @@
 const verifyWebhook = async (req, res) => {
     try {
-        return res.status(200).send('WEBHOOK_VERIFIED');
-    } catch (err) {
-        return res.status(500).send(err.message);
-    }
-};
-
-const handleWebhook = async (req, res) => {
-    try {
         // Your verify token. Should be a random string.
         const VERIFY_TOKEN = process.env.MESSENGER_VERIFY_TOKEN;
         // Parse the query params
@@ -25,6 +17,14 @@ const handleWebhook = async (req, res) => {
         res.sendStatus(403);
     } catch (err) {
         return res.sendStatus(403);
+    }
+};
+
+const handleWebhook = async (req, res) => {
+    try {
+        return res.status(200).send('WEBHOOK_VERIFIED');
+    } catch (err) {
+        return res.status(500).send(err.message);
     }
 }
 
