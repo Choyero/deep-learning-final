@@ -2,6 +2,7 @@ const verifyWebhook = async (req, res) => {
     try {
         // Your verify token. Should be a random string.
         const VERIFY_TOKEN = process.env.MESSENGER_VERIFY_TOKEN;
+        console.log(process.env.MESSENGER_VERIFY_TOKEN);
         // Parse the query params
         let mode = req.query['hub.mode'];
         let token = req.query['hub.verify_token'];

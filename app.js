@@ -1,5 +1,7 @@
 const express = require('express');
 const messengerRoute = require('./routes/messenger.route');
+const dotenv = require('dotenv');
+dotenv.config();
 
 const app = express();
 const port = 3000;
