@@ -26,6 +26,7 @@ const verifyWebhook = async (req, res) => {
 
 const handleWebhook = async (req, res) => {
     try {
+        console.log(req.body);
         if (req.body.object === 'page') {
             for (let entry of req.body.entry) {
                 const pageId = entry.id;
