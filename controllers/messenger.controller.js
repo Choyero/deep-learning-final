@@ -1,5 +1,5 @@
 import SpamDetector from '../utils/SpamDetector.utils.js';
-import { generateResponse } from '../utils/LLMResponder.utils.js';
+import { generateResponse, sendMessengerMessage } from '../utils/LLMResponder.utils.js';
 
 const verifyWebhook = async (req, res) => {
     try {
@@ -37,13 +37,14 @@ const handleWebhook = async (req, res) => {
                     const messageText = message.message.text;
                     const messageId = message.message.mid;
                     if (messageText) {
-                        const spamDetector = new SpamDetector(messageText);
-                        const isSpam = await spamDetector.execute(messageText);
-                        console.log(`Received message from ${senderId} with message: ${messageText}`);
-                        console.log(`Is spam: ${isSpam}`);
-                        if (isSpam) {
-                            await generateResponse(messageText);
-                        }
+                        // const spamDetector = new SpamDetector(messageText);
+                        // const isSpam = await spamDetector.execute(messageText);
+                        // console.log(`Received message from ${senderId} with message: ${messageText}`);
+                        // console.log(`Is spam: ${isSpam}`);
+                        // if (isSpam) {
+                        //     await generateResponse(messageText);
+                        // }
+                        await sendMessengerMessage('Hello, World!', senderId);
                     }
                 }
             }
