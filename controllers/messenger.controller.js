@@ -1,3 +1,6 @@
+import SpamDetector from '../utils/SpamDetector.utils.js';
+import { generateResponse } from '../utils/LLMResponder.utils.js';
+
 const verifyWebhook = async (req, res) => {
     try {
         // Your verify token. Should be a random string.
@@ -23,15 +26,35 @@ const verifyWebhook = async (req, res) => {
 
 const handleWebhook = async (req, res) => {
     try {
-        console.log(req.body);
+        if (req.body.object === 'page') {
+            for (let entry of req.body.entry) {
+                const pageId = entry.id;
+                if (pageId !== process.env.PAGE_ID) return res.sendStatus(200);
+                for (let message of entry.messaging) {
+                    const senderId = message.sender.id;
+                    const recipientId = message.recipient.id;
+                    if (!message.message) return res.sendStatus(200);
+                    const messageText = message.message.text;
+                    const messageId = message.message.mid;
+                    if (messageText) {
+                        const spamDetector = new SpamDetector(messageText);
+                        const isSpam = await spamDetector.execute(messageText);
+                        console.log(`Received message from ${senderId} with message: ${messageText}`);
+                        console.log(`Is spam: ${isSpam}`);
+                        if (isSpam) {
+                            await generateResponse(messageText);
+                        }
+                    }
+                }
+            }
+        }
         return res.status(200).send('WEBHOOK_VERIFIED');
     } catch (err) {
         return res.status(500).send(err.message);
     }
 }
 
-
-module.exports = {
+export default {
     verifyWebhook,
-    handleWebhook,
-}
+    handleWebhook
+};

@@ -1,9 +1,9 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const messengerController = require('../controllers/messenger.controller');
+import messengerController from '../controllers/messenger.controller.js';
 
 router.get('/', messengerController.verifyWebhook);
 
 router.post('/', messengerController.handleWebhook);
 
-module.exports = router;
+export default router;

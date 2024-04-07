@@ -1,6 +1,6 @@
-const express = require('express');
-const messengerRoute = require('./routes/messenger.route');
-const dotenv = require('dotenv');
+import express from 'express';
+import messengerRoute from './routes/messenger.route.js';
+import dotenv from 'dotenv';
 dotenv.config();
 
 const app = express();
