@@ -39,6 +39,7 @@ const handleWebhook = async (req, res) => {
                     if (message.message.is_echo) {
                         return res.sendStatus(200);
                     }
+                    console.log(messageText);
                     if (messageText) {
                         const spamDetector = new SpamDetector(messageText);
                         //const isSpam = await spamDetector.execute(messageText);
