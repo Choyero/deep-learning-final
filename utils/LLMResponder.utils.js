@@ -32,7 +32,7 @@ export async function generateResponse(inputMessage) {
 
 export async function sendMessengerMessage(message, recipientId) {
     try {
-        const response = await fetch(`https://graph.facebook.com/v19.0/me/messages?access_token=${process.env.PAGE_ACCESS_TOKEN}`, {
+        const response = await fetch(`https://graph.facebook.com/v19.0/me/messages?access_token=${process.env.PAGE_TOKEN}`, {
             method: 'POST',
             headers: {
                 'content-type': 'application/json',
@@ -46,9 +46,7 @@ export async function sendMessengerMessage(message, recipientId) {
                 }
             })
         });
-        console.log(response)
         const data = await response.json();
-        console.log(data)
         return data;
     } catch (err) {
         console.log(err);

@@ -31,11 +31,15 @@ const handleWebhook = async (req, res) => {
                 const pageId = entry.id;
                 if (pageId !== process.env.PAGE_ID) return res.sendStatus(200);
                 for (let message of entry.messaging) {
+                    console.log(message);
                     const senderId = message.sender.id;
                     const recipientId = message.recipient.id;
                     if (!message.message) return res.sendStatus(200);
                     const messageText = message.message.text;
                     const messageId = message.message.mid;
+                    if (message.message.is_echo) {
+                        console.log('is echo');
+                    }
                     if (messageText) {
                         // const spamDetector = new SpamDetector(messageText);
                         // const isSpam = await spamDetector.execute(messageText);
