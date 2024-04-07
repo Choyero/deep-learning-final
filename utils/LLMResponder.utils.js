@@ -1,7 +1,7 @@
 import fetch from 'node-fetch';
 
 
-export async function generateResponse(inputMessage) {
+export async function generateResponse(inputMessage, senderId) {
     try {
         const prompt = `
         <s>[INST] <<SYS>>
@@ -21,9 +21,12 @@ export async function generateResponse(inputMessage) {
                 "temperature": 0.5,
             })
         });
-        console.log(response)
         const data = await response.json();
         console.log(data)
+        if (data.results) {
+            const text = data.results[0].generated_text;
+            await sendMessengerMessage(text, senderId);
+        }
     } catch (err) {
         console.log(err);
         return null;
