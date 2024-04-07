@@ -41,7 +41,8 @@ const handleWebhook = async (req, res) => {
                     }
                     if (messageText) {
                         const spamDetector = new SpamDetector(messageText);
-                        const isSpam = await spamDetector.execute(messageText);
+                        //const isSpam = await spamDetector.execute(messageText);
+                        const isSpam = await spamDetector.executeDistilBert(messageText);
                         // console.log(`Received message from ${senderId} with message: ${messageText}`);
                         // console.log(`Is spam: ${isSpam}`);
                         if (isSpam) {

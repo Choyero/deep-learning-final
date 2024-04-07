@@ -5,6 +5,7 @@ import path from 'path';
 import fetch from 'node-fetch';
 global.fetch = fetch;
 import * as DICTIONARY from '../ai-models/dictionary.js';
+import { BertTokenizer } from 'bert-tokenizer';
 
 // The number of input elements the ML Model is expecting.
 const ENCODING_LENGTH = 20;
@@ -20,6 +21,7 @@ export default class SpamDetector {
     }
 
     MODEL_PATH = path.resolve(__dirname, '../ai-models/model.json');
+    MODEL_PATH_DISTILBERT = path.resolve(__dirname, '../spam-detector-js/model.json');
 
     async execute(text) {
         try {
@@ -63,6 +65,27 @@ export default class SpamDetector {
         
         // Convert to a TensorFlow Tensor and return that.
         return tf.tensor([returnArray]);
+      }
+
+      async executeDistilBert(inputText) {
+        try {
+            const vocabUrl = 'node_modules/bert-tokenizer/assets/vocab.json'
+            const tokenizer = new BertTokenizer(vocabUrl);
+            const tokens = tokenizer.convertSingleExample(inputText);
+            let input_ids = tokens.inputIds;
+            let attention_mask = tokens.inputMask;
+            const tensor1 = tf.tensor([input_ids], [1, 128], 'int32');
+            const tensor2 = tf.tensor([attention_mask], [1, 128], 'int32');
+            const model = await tf.loadGraphModel(`file://${this.MODEL_PATH_DISTILBERT}`);
+            const result = await model.predictAsync({input_ids: tensor1, attention_mask: tensor2});
+            const predictedClassId = result.argMax(-1).dataSync()[0];
+            if (predictedClassId === 1) {
+                return true;
+            }
+            return false;
+        } catch (err) {
+            console.log(err);
+        }
       }
 }
 
