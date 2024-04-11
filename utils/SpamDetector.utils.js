@@ -76,12 +76,9 @@ export default class SpamDetector {
             let attention_mask = tokens.inputMask;
             const tensor1 = tf.tensor([input_ids], [1, 128], 'int32');
             const tensor2 = tf.tensor([attention_mask], [1, 128], 'int32');
-            console.log(tensor1);
-            console.log(tensor2);
             const model = await tf.loadGraphModel(`file://${this.MODEL_PATH_DISTILBERT}`);
             const result = await model.predictAsync({input_ids: tensor1, attention_mask: tensor2});
             const predictedClassId = result.argMax(-1).dataSync()[0];
-            console.log(predictedClassId);
             if (predictedClassId === 1) {
                 return true;
             }

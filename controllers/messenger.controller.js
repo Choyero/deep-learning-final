@@ -26,7 +26,6 @@ const verifyWebhook = async (req, res) => {
 
 const handleWebhook = async (req, res) => {
     try {
-        console.log(req.body);
         if (req.body.object === 'page') {
             for (let entry of req.body.entry) {
                 const pageId = entry.id;
@@ -40,13 +39,9 @@ const handleWebhook = async (req, res) => {
                     if (message.message.is_echo) {
                         return res.sendStatus(200);
                     }
-                    console.log(messageText);
                     if (messageText) {
                         const spamDetector = new SpamDetector(messageText);
-                        //const isSpam = await spamDetector.execute(messageText);
                         const isSpam = await spamDetector.executeDistilBert(messageText);
-                        // console.log(`Received message from ${senderId} with message: ${messageText}`);
-                        // console.log(`Is spam: ${isSpam}`);
                         if (isSpam) {
                             await generateResponse(messageText, senderId);
                         } else {

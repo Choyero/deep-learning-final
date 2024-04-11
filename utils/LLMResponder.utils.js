@@ -22,7 +22,6 @@ export async function generateResponse(inputMessage, senderId) {
             })
         });
         const data = await response.json();
-        console.log(data)
         if (data.results) {
             const text = data.results[0].generated_text;
             await sendMessengerMessage(text, senderId);
